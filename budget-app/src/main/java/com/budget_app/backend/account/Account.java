@@ -1,4 +1,4 @@
-package com.budget_app.backend.Account;
+package main.java.com.budget_app.backend.account;
 
 import jakarta.persistence.*;
 

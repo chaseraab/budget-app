@@ -1,4 +1,4 @@
-package com.budget_app.backend.Account;
+package main.java.com.budget_app.backend.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -8,8 +8,6 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.budget_app.backend.Account.Account;
 
 @Service
 public class AccountService{
@@ -22,6 +20,19 @@ public class AccountService{
 
     public ResponseEntity<List<Account>> getAllAccounts() {
         return new ResponseEntity<>(accountRepository.findAll(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Account> getAccountByName(String name) {
+       try {
+           Optional<Account> retrievedAccount = accountRepository.findByName(name);
+           if (retrievedAccount.isPresent()) {
+               return new ResponseEntity<>(retrievedAccount.get(), HttpStatus.OK);
+           } else {
+               return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           }
+       } catch (IllegalArgumentException e) {
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+       }
     }
 
 }
