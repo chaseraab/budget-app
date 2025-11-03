@@ -1,7 +1,9 @@
-package com.budget_app.backend.Account;
+package com.budget_app.backend.implementation.account;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    //
+
+    Optional<Account> findByName(String name);
 }
