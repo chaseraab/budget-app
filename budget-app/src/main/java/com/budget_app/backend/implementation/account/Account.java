@@ -13,9 +13,9 @@ public class Account {
     private String type;
 
     public Long getId() {return id;}
-    public void setId(Long Id) {this.id = id;}
+    public Account setId(Long Id) {this.id = id; return this;}
     public String getName() {return name;}
-    public void setName(String name) {this.name = name;}
+    public Account setName(String name) {this.name = name; return this;}
     public String getType() {return type;}
-    public void setType(String type) {this.type = type;}
+    public Account setType(String type) {this.type = type; return this;}
 }

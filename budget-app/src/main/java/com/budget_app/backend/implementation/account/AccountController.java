@@ -37,4 +37,9 @@ public class AccountController {
     public ResponseEntity<String> deleteAccountById(@PathVariable Long id) {
         return accountService.deleteById(id);
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Account> updateById(@PathVariable Long id, @RequestBody Account account) {
+        return accountService.update(id, account);
+    }
 }
