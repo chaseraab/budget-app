@@ -1,25 +1,18 @@
 package com.budget_app.backend.implementation.account;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.budget_app.backend.base.jpa.BaseController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/accounts")
-public class AccountController {
+public class AccountController extends BaseController<Account, Long> {
 
-    @Autowired
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        return accountService.getAll();
+    public AccountController(AccountService service) {
+        super(service);
+        this.accountService = service;
     }
 
     @GetMapping(path = "/name/{name}")
@@ -27,18 +20,4 @@ public class AccountController {
         return accountService.getByName(name);
     }
 
-    @PostMapping("/new/")
-    public ResponseEntity<String> addAccount(@RequestBody Account account) {
-        return accountService.create(account);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteAccountById(@PathVariable Long id) {
-        return accountService.deleteById(id);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Account> updateById(@PathVariable Long id, @RequestBody Account account) {
-        return accountService.update(id, account);
-    }
 }
