@@ -2,8 +2,8 @@ package com.budget_app.backend.interfaces.api;
 
 import org.springframework.http.ResponseEntity;
 
-public interface ApiPutable<T, ID> {
+public interface ApiPutable<ID, Req, Res> {
 
-    public ResponseEntity<T> update(ID id, T obj);
+    public ResponseEntity<Res> update(ID id, Req req);
 
 }

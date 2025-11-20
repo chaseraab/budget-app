@@ -19,5 +19,5 @@ public class AccountController extends BaseController<Account, Long> {
     public ResponseEntity<Account> getAccountByName(@PathVariable("name") String name) {
         return accountService.getByName(name);
     }
-
+    
 }

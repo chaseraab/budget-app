@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public abstract class BaseController<T, ID> {
+public abstract class BaseController<T, ID, Req> {
 
-    protected final BaseService<T, ID> service;
+    protected final BaseService<T, ID, Req> service;
 
-    protected BaseController(BaseService<T, ID> service) {
+    protected BaseController(BaseService<T, ID, Req> service) {
         this.service = service;
     }
 
@@ -18,18 +18,23 @@ public abstract class BaseController<T, ID> {
         return service.getAll();
     };
 
-    @PostMapping("/new/")
-    public ResponseEntity<String> addAccount(@RequestBody T obj) {
-        return service.create(obj);
+    @GetMapping("/{id}")
+    public ResponseEntity<T> getById(@PathVariable ID id) {
+        return service.getById(id);
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<String> create(@RequestBody Req req) {
+        return service.create(req);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteAccountById(@PathVariable ID id) {
+    public ResponseEntity<String> delete(@PathVariable ID id) {
         return service.deleteById(id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<T> updateById(@PathVariable ID id, @RequestBody T obj) {
-        return service.update(id, obj);
+    public ResponseEntity<T> updateById(@PathVariable ID id, @RequestBody Req req) {
+        return service.update(id, req);
     }
 }

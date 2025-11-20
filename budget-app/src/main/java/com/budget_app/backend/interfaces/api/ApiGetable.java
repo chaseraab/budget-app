@@ -3,8 +3,8 @@ package com.budget_app.backend.interfaces.api;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 
-public interface ApiGetable<T, ID> {
+public interface ApiGetable<ID, Res> {
 
-    public ResponseEntity<List<T>> getAll();
-    public ResponseEntity<T> getById(ID id);
+    public ResponseEntity<List<Res>> getAll();
+    public ResponseEntity<Res> getById(ID id);
 }

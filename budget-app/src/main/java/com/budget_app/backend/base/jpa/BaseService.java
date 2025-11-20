@@ -10,17 +10,17 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseService<T, ID> implements ApiGetable<T, ID>, ApiDeletable<ID>, ApiPostable<T>, ApiPutable<T, ID> {
+public abstract class BaseService<T, ID, Req, Res> implements ApiGetable<ID, Res>, ApiDeletable<ID>, ApiPostable<Req>, ApiPutable<ID, Req, Res> {
 
     protected final JpaRepository<T, ID> repository;
 
     protected BaseService(JpaRepository<T, ID> repository) {this.repository = repository;}
 
-    public ResponseEntity<List<T>> getAll() {
+    public ResponseEntity<List<Res>> getAll() {
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
-    public ResponseEntity<T> getById(ID id) {
+    public ResponseEntity<Res> getById(ID id) {
         try {
             Optional<T> result = repository.findById(id);
             return result
@@ -40,20 +40,20 @@ public abstract class BaseService<T, ID> implements ApiGetable<T, ID>, ApiDeleta
         }
     }
 
-    public ResponseEntity<String> create(T obj) {
+    public ResponseEntity<String> create(Req req) {
         try {
-            repository.save(obj);
+            repository.save(req);
             return new ResponseEntity<>("Object Successfully Created", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.toString(), HttpStatus.BAD_REQUEST);
             }
     }
 
-    public ResponseEntity<T> update(ID id, T newObj) {
+    public ResponseEntity<Res> update(ID id, Req req) {
         Optional<T> search = repository.findById(id);
         if (search.isEmpty()) {return new ResponseEntity<>(HttpStatus.NOT_FOUND);}
         T oldObj = search.get();
-        updateFields(newObj, oldObj);
+        updateFields(req, oldObj);
         repository.save(oldObj);
         return new ResponseEntity<>(oldObj, HttpStatus.OK);
     }
