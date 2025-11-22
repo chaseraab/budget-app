@@ -34,10 +34,6 @@ public class AccountService extends BaseService<Account, Long, AccountRequest, A
         return mapper.toResponse(entity);
     }
 
-    public void updateFields(Account newAccount, Account oldAccount) {
-        oldAccount.setName(newAccount.getName()).setType(newAccount.getType());
-    }
-
     public ResponseEntity<Account> getByName(String name) {
         Optional<Account> found = accountRepository.findByName(name);
         return found
@@ -48,5 +44,17 @@ public class AccountService extends BaseService<Account, Long, AccountRequest, A
     public ResponseEntity<AccountResponse> create(AccountRequest req) {
         Account saved = repository.save(toEntity(req));
         return ResponseEntity.ok(toResponse(saved));
+    }
+
+    public ResponseEntity<AccountResponse> update(Long id, AccountRequest request) {
+        return repository.findById(id)
+                .map(existing -> {
+                    existing.setName(request.name());
+                    existing.setType(request.type());
+
+                    repository.save(existing);
+                    return ResponseEntity.ok(toResponse(existing));
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

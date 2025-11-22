@@ -16,13 +16,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountBalanceService extends BaseService<AccountBalance, Long, AccountBalanceRequest, AccountBalanceResponse> {
 
-    private final AccountBalanceRepository accountBalanceRepository;
     private final AccountRepository accountRepository;
     private final AccountBalanceMapper mapper;
 
     public AccountBalanceService(AccountBalanceRepository accountBalanceRepository, AccountRepository accountRepository, AccountBalanceMapper mapper) {
         super(accountBalanceRepository);
-        this.accountBalanceRepository = accountBalanceRepository;
         this.accountRepository = accountRepository;
         this.mapper = mapper;
     }
@@ -42,13 +40,22 @@ public class AccountBalanceService extends BaseService<AccountBalance, Long, Acc
         return  mapper.toResponse(entity);
     }
 
-    public void updateFields(AccountBalance newBalance, AccountBalance oldBalance) {
-        oldBalance.setDate(newBalance.getDate()).setAccount(newBalance.getAccount()).setBalance(newBalance.getBalance());
+    public ResponseEntity<AccountBalanceResponse> update(Long id, AccountBalanceRequest request) {
+        return repository.findById(id)
+                .map(existing -> {
+                    Account account = accountRepository.findById(request.accountId())
+                            .orElseThrow(() -> new RuntimeException("Account not found"));
+                    existing.setDate(request.date());
+                    existing.setAccount(account);
+                    existing.setBalance(request.balance());
+
+                    repository.save(existing);
+                    return ResponseEntity.ok(toResponse(existing));
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public ResponseEntity<AccountBalanceResponse> create(AccountBalanceRequest request) {
-//        Account account = accountRepository.findById(request.accountId())
-//                .orElseThrow(() -> new RuntimeException("Account Not Found"));
         Account account = getAccount(request.accountId());
 
         AccountBalance balance = new AccountBalance()

@@ -14,7 +14,7 @@ public class AccountBalance {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name="account")
+    @JoinColumn(name="accountid")
     private Account account;
     private float balance;
 
