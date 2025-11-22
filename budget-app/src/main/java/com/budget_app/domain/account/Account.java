@@ -1,4 +1,4 @@
-package com.budget_app.backend.implementation.account;
+package com.budget_app.domain.account;
 
 import jakarta.persistence.*;
 
@@ -18,4 +18,5 @@ public class Account {
     public Account setName(String name) {this.name = name; return this;}
     public String getType() {return type;}
     public Account setType(String type) {this.type = type; return this;}
+
 }

@@ -1,5 +1,6 @@
-package com.budget_app.backend.implementation.account;
+package com.budget_app.repository.account;
 
+import com.budget_app.domain.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
