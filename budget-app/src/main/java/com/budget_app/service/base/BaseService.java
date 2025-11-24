@@ -1,5 +1,8 @@
 package com.budget_app.service.base;
 
+import com.budget_app.domain.account.Account;
+import com.budget_app.dto.account.AccountRequest;
+import com.budget_app.dto.account.AccountResponse;
 import com.budget_app.service.api.ApiDeletable;
 import com.budget_app.service.api.ApiGetable;
 import com.budget_app.service.api.ApiPutable;
@@ -16,7 +19,7 @@ public abstract class BaseService<T, ID, Req, Res> implements ApiGetable<ID, Res
     public abstract T toEntity(Req req);
     public abstract Res toResponse(T entity);
 
-    public abstract ResponseEntity<Res> create(Req req);
+//    public abstract ResponseEntity<Res> create(Req req);
     public abstract ResponseEntity<Res> update(ID id, Req req);
 
     public ResponseEntity<List<Res>> getAll() {
@@ -39,6 +42,11 @@ public abstract class BaseService<T, ID, Req, Res> implements ApiGetable<ID, Res
             repository.deleteById(id);
             return ResponseEntity.ok("Deleted");
         }
+    }
+
+    public ResponseEntity<Res> create(Req req) {
+        T saved = repository.save(toEntity(req));
+        return ResponseEntity.ok(toResponse(saved));
     }
 
 }

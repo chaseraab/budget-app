@@ -41,11 +41,6 @@ public class AccountService extends BaseService<Account, Long, AccountRequest, A
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<AccountResponse> create(AccountRequest req) {
-        Account saved = repository.save(toEntity(req));
-        return ResponseEntity.ok(toResponse(saved));
-    }
-
     public ResponseEntity<AccountResponse> update(Long id, AccountRequest request) {
         return repository.findById(id)
                 .map(existing -> {
