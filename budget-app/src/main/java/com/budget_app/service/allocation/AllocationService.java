@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AllocationService extends BaseService<Allocation, Long, AllocationRequest, AllocationResponse> {
 
-    //private final AllocationRepository allocationRepository;
     private final AllocationMapper mapper;
 
     public AllocationService(AllocationRepository repository, AllocationMapper mapper) {

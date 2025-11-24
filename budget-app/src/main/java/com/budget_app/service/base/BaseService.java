@@ -19,7 +19,6 @@ public abstract class BaseService<T, ID, Req, Res> implements ApiGetable<ID, Res
     public abstract T toEntity(Req req);
     public abstract Res toResponse(T entity);
 
-//    public abstract ResponseEntity<Res> create(Req req);
     public abstract ResponseEntity<Res> update(ID id, Req req);
 
     public ResponseEntity<List<Res>> getAll() {
