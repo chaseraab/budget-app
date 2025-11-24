@@ -1,9 +1,6 @@
 package com.budget_app.mapper.accountBalance;
 
-import com.budget_app.domain.account.Account;
 import com.budget_app.domain.accountBalance.AccountBalance;
-import com.budget_app.dto.account.AccountRequest;
-import com.budget_app.dto.account.AccountResponse;
 import com.budget_app.dto.accountBalance.AccountBalanceRequest;
 import com.budget_app.dto.accountBalance.AccountBalanceResponse;
 import org.mapstruct.Mapper;
