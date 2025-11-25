@@ -1,4 +1,4 @@
 package com.budget_app.dto.allocation;
 
-public record AllocationRequest(String name, String type, double amount, boolean isTemp, boolean isExpected) {
+public record AllocationRequest(String name, String type, double amount, boolean isActive, boolean isExpected) {
 }

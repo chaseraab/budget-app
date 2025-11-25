@@ -12,7 +12,7 @@ public class Allocation {
     private String name;
     private String type;
     private double amount;
-    private boolean isTemp;
+    private boolean isActive;
     private boolean isExpected;
 
     public Long getId() {return id;}
@@ -22,8 +22,8 @@ public class Allocation {
     public Allocation setType(String type) {this.type = type; return this;}
     public double getAmount() {return this.amount;}
     public Allocation setAmount(Double amount) {this.amount = amount; return this;}
-    public boolean getIsTemp() {return this.isTemp;}
-    public Allocation setIsTemp(boolean isTemp) {this.isTemp = isTemp; return this;}
+    public boolean getIsActive() {return this.isActive;}
+    public Allocation setIsActive(boolean isActive) {this.isActive = isActive; return this;}
     public boolean getIsExpected() {return this.isExpected;}
     public Allocation setIsExpected(boolean isExpected) {this.isExpected = isExpected; return this;}
 }

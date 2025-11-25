@@ -35,7 +35,7 @@ public class AllocationService extends BaseService<Allocation, Long, AllocationR
                     existing.setName(request.name());
                     existing.setType(request.type());
                     existing.setAmount(request.amount());
-                    existing.setIsTemp(request.isTemp());
+                    existing.setIsActive(request.isActive());
                     existing.setIsExpected(request.isExpected());
                     repository.save(existing);
                     return ResponseEntity.ok(toResponse(existing));
