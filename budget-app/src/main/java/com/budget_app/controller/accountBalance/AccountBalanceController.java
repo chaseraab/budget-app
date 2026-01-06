@@ -21,10 +21,4 @@ public class AccountBalanceController extends BaseController<Long, AccountBalanc
         this.accountBalanceService = accountBalanceService;
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<AccountBalanceResponse> create(@RequestBody AccountBalanceRequest request) {
-        System.out.println("Creating new object");
-        return accountBalanceService.create(request);
-    }
-
 }
