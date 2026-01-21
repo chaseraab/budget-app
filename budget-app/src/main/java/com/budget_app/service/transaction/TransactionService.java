@@ -10,7 +10,7 @@ import com.budget_app.repository.account.AccountRepository;
 import com.budget_app.repository.allocation.AllocationRepository;
 import com.budget_app.repository.transaction.TransactionRepository;
 import com.budget_app.service.base.BaseService;
-import com.budget_app.specification.base.BaseSpecification;
+import com.budget_app.search.specification.base.BaseSpecification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

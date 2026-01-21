@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +30,15 @@ public class TransactionController extends BaseController<Long, TransactionReque
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<TransactionResponse>> searchTransactions(@RequestBody Map<String, Object> filters) {
+    public ResponseEntity<List<TransactionResponse>> searchTransactions(@RequestBody Map<String, Object> params) {
+        Map<String, Object> filters = new HashMap<>();
+        params.forEach((key, value) -> {
+            if (key.equals("date")) {
+                filters.put(key, LocalDate.parse((CharSequence) value));
+            } else {
+                filters.put(key, value);
+            }
+        });
         return transactionService.searchTransactions(filters);
     }
 }
