@@ -42,26 +42,6 @@ public class BaseSpecification<T> implements Specification<T> {
         return value;
     }
 
-//    @Override
-//    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//        if (filters != null && !filters.isEmpty()) {
-//            filters.forEach((key, value) -> {
-//                if (value != null) {
-//                    if (value instanceof String) {
-//                        predicates.add(criteriaBuilder.like(
-//                                criteriaBuilder.lower(root.get(key)), "%" + value.toString().toLowerCase() + "%"
-//                        ));
-//                    } else {
-//                        predicates.add(criteriaBuilder.equal(root.get(key), value));
-//                    }
-//                }
-//            });
-//        }
-//        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//    }
-
     private Predicate buildGreaterThan(CriteriaBuilder cb, Path<?> path, Object value) {
         Class<?> type = path.getJavaType();
         if (type.equals(LocalDate.class)) {
@@ -69,6 +49,42 @@ public class BaseSpecification<T> implements Specification<T> {
         }
         try {
             return cb.greaterThan(path.as(Float.class), (Float) Float.parseFloat((String)value));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Predicate buildGreaterThanEqual(CriteriaBuilder cb, Path<?> path, Object value) {
+        Class<?> type = path.getJavaType();
+        if (type.equals(LocalDate.class)) {
+            return cb.greaterThanOrEqualTo(path.as(LocalDate.class), (LocalDate) value);
+        }
+        try {
+            return cb.greaterThanOrEqualTo(path.as(Float.class), (Float) Float.parseFloat((String)value));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Predicate buildLessThan(CriteriaBuilder cb, Path<?> path, Object value) {
+        Class<?> type = path.getJavaType();
+        if (type.equals(LocalDate.class)) {
+            return cb.lessThan(path.as(LocalDate.class), (LocalDate) value);
+        }
+        try {
+            return cb.lessThan(path.as(Float.class), (Float) Float.parseFloat((String)value));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Predicate buildLessThanEqual(CriteriaBuilder cb, Path<?> path, Object value) {
+        Class<?> type = path.getJavaType();
+        if (type.equals(LocalDate.class)) {
+            return cb.lessThanOrEqualTo(path.as(LocalDate.class), (LocalDate) value);
+        }
+        try {
+            return cb.lessThanOrEqualTo(path.as(Float.class), (Float) Float.parseFloat((String)value));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -96,15 +112,15 @@ public class BaseSpecification<T> implements Specification<T> {
                 );
 
                 case GTE -> predicates.add(
-                        cb.greaterThanOrEqualTo(path.as(Comparable.class), (Comparable) value)
+                        buildGreaterThanEqual(cb, path, value)
                 );
 
                 case LT -> predicates.add(
-                        cb.lessThan(path.as(Comparable.class), (Comparable) value)
+                        buildLessThan(cb, path, value)
                 );
 
                 case LTE -> predicates.add(
-                        cb.lessThanOrEqualTo(path.as(Comparable.class), (Comparable) value)
+                        buildLessThanEqual(cb, path, value)
                 );
 
                 case EQ -> predicates.add(cb.equal(path, value));
