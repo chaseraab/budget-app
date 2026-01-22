@@ -38,4 +38,5 @@ public abstract class BaseController<ID, Req, Res> {
     public ResponseEntity<Res> updateById(@PathVariable ID id, @RequestBody Req req) {
         return service.update(id, req);
     }
+
 }
