@@ -81,7 +81,6 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
                         .stream().map(this::toResponse)
                         .toList()
         );
-        //return transactionRepository.findAll(new BaseSpecification<Transaction>(filters));
     }
 
 }
