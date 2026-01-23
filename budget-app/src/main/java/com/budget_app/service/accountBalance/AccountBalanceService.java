@@ -1,7 +1,10 @@
 package com.budget_app.service.accountBalance;
 
+import com.budget_app.domain.transaction.Transaction;
 import com.budget_app.dto.accountBalance.AccountBalanceResponse;
+import com.budget_app.dto.transaction.TransactionResponse;
 import com.budget_app.mapper.accountBalance.AccountBalanceMapper;
+import com.budget_app.search.specification.base.BaseSpecification;
 import com.budget_app.service.base.BaseService;
 import com.budget_app.domain.account.Account;
 import com.budget_app.repository.account.AccountRepository;
@@ -13,14 +16,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class AccountBalanceService extends BaseService<AccountBalance, Long, AccountBalanceRequest, AccountBalanceResponse> {
 
     private final AccountRepository accountRepository;
+    private final AccountBalanceRepository accountBalanceRepository;
     private final AccountBalanceMapper mapper;
 
     public AccountBalanceService(AccountBalanceRepository accountBalanceRepository, AccountRepository accountRepository, AccountBalanceMapper mapper) {
         super(accountBalanceRepository);
+        this.accountBalanceRepository = accountBalanceRepository;
         this.accountRepository = accountRepository;
         this.mapper = mapper;
     }
@@ -66,6 +74,13 @@ public class AccountBalanceService extends BaseService<AccountBalance, Long, Acc
         repository.save(balance);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<AccountBalanceResponse>> search(Map<String, Object> filters) {
+        return ResponseEntity.ok(accountBalanceRepository.findAll(new BaseSpecification<AccountBalance>(filters))
+                .stream().map(this::toResponse)
+                .toList()
+        );
     }
 
 }
