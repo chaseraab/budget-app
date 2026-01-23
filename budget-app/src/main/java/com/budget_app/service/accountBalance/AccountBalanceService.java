@@ -76,11 +76,4 @@ public class AccountBalanceService extends BaseService<AccountBalance, Long, Acc
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<List<AccountBalanceResponse>> search(Map<String, Object> filters) {
-        return ResponseEntity.ok(accountBalanceRepository.findAll(new BaseSpecification<AccountBalance>(filters))
-                .stream().map(this::toResponse)
-                .toList()
-        );
-    }
-
 }

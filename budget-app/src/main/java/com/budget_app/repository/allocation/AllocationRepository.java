@@ -1,7 +1,9 @@
 package com.budget_app.repository.allocation;
 
 import com.budget_app.domain.allocation.Allocation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.budget_app.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AllocationRepository extends JpaRepository<Allocation, Long> {
+@Repository
+public interface AllocationRepository extends BaseRepository<Allocation, Long> {
 }

@@ -4,7 +4,10 @@ import com.budget_app.service.base.BaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class BaseController<ID, Req, Res> {
 
@@ -39,4 +42,16 @@ public abstract class BaseController<ID, Req, Res> {
         return service.update(id, req);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Res>> search(@RequestBody Map<String, Object> params) {
+        Map<String, Object> filters = new HashMap<>();
+        params.forEach((key, value) -> {
+            if (key.equals("date")) {
+                filters.put(key, LocalDate.parse((CharSequence) value));
+            } else {
+                filters.put(key, value);
+            }
+        });
+        return service.search(filters);
+    }
 }

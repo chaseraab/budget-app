@@ -1,7 +1,8 @@
 package com.budget_app.repository.income;
 
 import com.budget_app.domain.income.Income;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.budget_app.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IncomeRepository extends JpaRepository<Income, Long> {
-}
+@Repository
+public interface IncomeRepository extends BaseRepository<Income, Long> {}
