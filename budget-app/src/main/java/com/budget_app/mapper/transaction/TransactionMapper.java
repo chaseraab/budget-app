@@ -8,8 +8,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
 
-//    @Mapping(source = "accountId", target = "account.id")
-//    @Mapping(source = "allocationId", target = "allocation.id")
     @Mapping(target = "account", ignore = true)
     @Mapping(target = "allocation", ignore = true)
     Transaction toEntity(TransactionRequest request);

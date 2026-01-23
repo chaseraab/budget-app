@@ -1,10 +1,9 @@
 package com.budget_app.repository.accountBalance;
 
 import com.budget_app.domain.accountBalance.AccountBalance;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.budget_app.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AccountBalanceRepository extends JpaRepository<AccountBalance, Long>, JpaSpecificationExecutor<AccountBalance> {
-
-
+@Repository
+public interface AccountBalanceRepository extends BaseRepository<AccountBalance, Long> {
 }

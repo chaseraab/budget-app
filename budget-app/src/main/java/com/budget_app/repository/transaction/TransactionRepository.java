@@ -1,10 +1,9 @@
 package com.budget_app.repository.transaction;
 
 import com.budget_app.domain.transaction.Transaction;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.budget_app.repository.base.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
+public interface TransactionRepository extends BaseRepository<Transaction, Long> {
 }
