@@ -48,7 +48,8 @@ public class BaseSpecification<T> implements Specification<T> {
             return cb.greaterThan(path.as(LocalDate.class), (LocalDate) value);
         }
         try {
-            return cb.greaterThan(path.as(Float.class), (Float) Float.parseFloat((String)value));
+            Double number = Double.parseDouble(value.toString());
+            return cb.greaterThanOrEqualTo(path.as(Double.class), number);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +61,8 @@ public class BaseSpecification<T> implements Specification<T> {
             return cb.greaterThanOrEqualTo(path.as(LocalDate.class), (LocalDate) value);
         }
         try {
-            return cb.greaterThanOrEqualTo(path.as(Float.class), (Float) Float.parseFloat((String)value));
+            Double number = Double.parseDouble(value.toString());
+            return cb.greaterThanOrEqualTo(path.as(Double.class), number);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +74,8 @@ public class BaseSpecification<T> implements Specification<T> {
             return cb.lessThan(path.as(LocalDate.class), (LocalDate) value);
         }
         try {
-            return cb.lessThan(path.as(Float.class), (Float) Float.parseFloat((String)value));
+            Double number = Double.parseDouble(value.toString());
+            return cb.greaterThanOrEqualTo(path.as(Double.class), number);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -84,7 +87,8 @@ public class BaseSpecification<T> implements Specification<T> {
             return cb.lessThanOrEqualTo(path.as(LocalDate.class), (LocalDate) value);
         }
         try {
-            return cb.lessThanOrEqualTo(path.as(Float.class), (Float) Float.parseFloat((String)value));
+            Double number = Double.parseDouble(value.toString());
+            return cb.greaterThanOrEqualTo(path.as(Double.class), number);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
