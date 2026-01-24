@@ -4,6 +4,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 Notes/*
+test-data/*
+# Ignore everything in upload-dir
+upload-dir/*
+
+# But keep this one file
+!upload-dir/.gitkeep
 
 ### STS ###
 .apt_generated
