@@ -7,6 +7,7 @@ import com.budget_app.domain.allocation.Allocation;
 import com.budget_app.domain.transaction.Transaction;
 import com.budget_app.dto.transaction.TransactionRequest;
 import com.budget_app.dto.transaction.TransactionResponse;
+import com.budget_app.dto.transaction.TransactionUploadResponse;
 import com.budget_app.mapper.transaction.TransactionMapper;
 import com.budget_app.repository.account.AccountRepository;
 import com.budget_app.repository.allocation.AllocationRepository;
@@ -18,10 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class TransactionService extends BaseService<Transaction, Long, TransactionRequest, TransactionResponse> {
@@ -89,30 +89,36 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-   public ResponseEntity<String> upload(MultipartFile file) {
+    private List<Transaction> filterUploads(Boolean value, List<Transaction> transactions) {
+        List<Transaction> partitioned =
+                transactions.stream()
+                        .filter(t ->
+                                transactionRepository.findByConditions(
+                                        t.getCompany(),
+                                        t.getAmount(),
+                                        t.getDate()
+                                ).isEmpty() == value
+                        ).toList();
+        return partitioned;
+    }
+
+   public ResponseEntity<TransactionUploadResponse> upload(MultipartFile file, long accountId) {
         String fileLocation = storageService.store(file);
+        Account account = accountRepository.findById(accountId).orElse(null);
         try {
             List<String> contents = csvReader.ReadCSV(fileLocation);
             List<Transaction> transactions = contents.stream()
                     .map(csvTransactionConverter::convert)
                     .filter(Objects::nonNull)
+                    .map(t -> t.setAccount(account))
                     .toList();
-            transactions
-                    .forEach(t ->
-                            System.out.println(
-                                    "Date: " + t.getDate() +
-                                            ", Item: " + t.getItem() +
-                                            ", Company: " + t.getCompany() +
-                                            ", Amount: " + t.getAmount()
-                            )
-                    );
-
+            List<Transaction> toUpload = filterUploads(true, transactions);
+            List<Transaction> notToUpload = filterUploads(false, transactions);
+            toUpload.forEach(transactionRepository::save);
+            return ResponseEntity.ok(new TransactionUploadResponse(toUpload, notToUpload));
         } catch (Exception e){
             throw new RuntimeException(e);
        }
-
-
-        return null;
     }
 
 }

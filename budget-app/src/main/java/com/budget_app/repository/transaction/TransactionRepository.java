@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends BaseRepository<Transaction, Long> {
 
-    @Query("SELECT t from Transactions t where t.company = ?1 and t.amount = ?2 and t.date = ?3")
+    @Query("SELECT t from Transaction t where t.company = ?1 and t.amount = ?2 and t.date = ?3")
     List<Transaction> findByConditions(String company, double amount, LocalDate date);
 }

@@ -22,7 +22,7 @@ public class CSVTransactionConverter {
         }
         System.out.println(Arrays.toString(attributes));
         LocalDate date = LocalDate.parse(attributes[0]);
-        String company = attributes[1];
+        String company = attributes[1].replace("\"", "");
         double amount;
         try {
             amount = Double.valueOf(attributes[4]);
