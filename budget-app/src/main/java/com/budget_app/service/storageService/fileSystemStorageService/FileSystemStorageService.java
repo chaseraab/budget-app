@@ -17,11 +17,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.budget_app.storage.StorageFileNotFoundException;
-import com.budget_app.service.storageService.StorageService;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -39,7 +37,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public String store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -56,6 +54,7 @@ public class FileSystemStorageService implements StorageService {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
             }
+            return destinationFile.toString();
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
