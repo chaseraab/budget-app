@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 public abstract class BaseController<ID, Req, Res> {
 
     protected final BaseService<?, ID, Req, Res> service;
