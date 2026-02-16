@@ -8,6 +8,7 @@ import com.budget_app.mapper.income.IncomeMapper;
 import com.budget_app.repository.account.AccountRepository;
 import com.budget_app.repository.income.IncomeRepository;
 import com.budget_app.service.base.BaseService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,8 @@ public class IncomeService extends BaseService<Income, Long, IncomeRequest, Inco
 
         repository.save(income);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+//        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(toResponse(income));
     }
 
 }
