@@ -1,6 +1,6 @@
 package com.budget_app.service.allocation;
 
-import com.budget_app.domain.allocation.Allocation;
+import com.budget_app.domain.allocation.budget.AllocationBudget;
 import com.budget_app.dto.allocation.AllocationRequest;
 import com.budget_app.dto.allocation.AllocationResponse;
 import com.budget_app.mapper.allocation.AllocationMapper;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AllocationService extends BaseService<Allocation, Long, AllocationRequest, AllocationResponse> {
+public class AllocationService extends BaseService<AllocationBudget, Long, AllocationRequest, AllocationResponse> {
 
     private final AllocationMapper mapper;
 
@@ -21,11 +21,11 @@ public class AllocationService extends BaseService<Allocation, Long, AllocationR
     }
 
     @Override
-    public Allocation toEntity(AllocationRequest req) {
+    public AllocationBudget toEntity(AllocationRequest req) {
         return mapper.toEntity(req);
     }
 
-    public AllocationResponse toResponse(Allocation allocation) {
+    public AllocationResponse toResponse(AllocationBudget allocation) {
         return mapper.toResponse(allocation);
     }
 

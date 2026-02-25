@@ -3,7 +3,7 @@ package com.budget_app.service.transaction;
 import com.budget_app.csvHandler.CSVReader;
 import com.budget_app.csvHandler.CSVTransactionConverter;
 import com.budget_app.domain.account.Account;
-import com.budget_app.domain.allocation.Allocation;
+import com.budget_app.domain.allocation.budget.AllocationBudget;
 import com.budget_app.domain.transaction.Transaction;
 import com.budget_app.dto.transaction.TransactionRequest;
 import com.budget_app.dto.transaction.TransactionResponse;
@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class TransactionService extends BaseService<Transaction, Long, TransactionRequest, TransactionResponse> {
@@ -57,7 +56,7 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
                 .map(existing -> {
                     Account account = accountRepository.findById(request.accountId())
                             .orElseThrow(() -> new RuntimeException("Account not found"));
-                    Allocation allocation = allocationRepository.findById(request.allocationId())
+                    AllocationBudget allocation = allocationRepository.findById(request.allocationId())
                             .orElseThrow(() -> new RuntimeException("Allocation not found"));
                     existing.setAccount(account);
                     existing.setAllocation(allocation);
@@ -75,7 +74,7 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
         System.out.println("Received request: " + request.accountId() + " " + request.allocationId());
         Account account = accountRepository.findById(request.accountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        Allocation allocation = allocationRepository.findById(request.allocationId())
+        AllocationBudget allocation = allocationRepository.findById(request.allocationId())
                 .orElseThrow(() -> new RuntimeException("Allocation not found"));
 
         Transaction transaction = new Transaction()
