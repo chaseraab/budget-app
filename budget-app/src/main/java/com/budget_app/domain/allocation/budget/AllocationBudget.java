@@ -1,5 +1,6 @@
 package com.budget_app.domain.allocation.budget;
 
+import com.budget_app.domain.budget.Budget;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,8 +13,10 @@ public class AllocationBudget {
     private String name;
     private String type;
     private double amount;
-    private boolean isActive;
-    private boolean isExpected;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "budgetid", nullable = false)
+    private Budget budget;
 
     public Long getId() {return id;}
     public String getName() {return name;}
@@ -22,8 +25,6 @@ public class AllocationBudget {
     public AllocationBudget setType(String type) {this.type = type; return this;}
     public double getAmount() {return this.amount;}
     public AllocationBudget setAmount(Double amount) {this.amount = amount; return this;}
-    public boolean getIsActive() {return this.isActive;}
-    public AllocationBudget setIsActive(boolean isActive) {this.isActive = isActive; return this;}
-    public boolean getIsExpected() {return this.isExpected;}
-    public AllocationBudget setIsExpected(boolean isExpected) {this.isExpected = isExpected; return this;}
+    public Budget getBudget() {return budget;}
+    public AllocationBudget setBudget(Budget budget) {this.budget = budget; return this;}
 }

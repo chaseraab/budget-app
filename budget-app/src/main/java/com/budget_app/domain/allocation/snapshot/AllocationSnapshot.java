@@ -13,7 +13,6 @@ public class AllocationSnapshot {
     private String type;
     private double amount;
     private boolean isActive;
-    private boolean isExpected;
 
     public Long getId() {return id;}
     public String getName() {return name;}
@@ -24,6 +23,4 @@ public class AllocationSnapshot {
     public AllocationSnapshot setAmount(Double amount) {this.amount = amount; return this;}
     public boolean getIsActive() {return this.isActive;}
     public AllocationSnapshot setIsActive(boolean isActive) {this.isActive = isActive; return this;}
-    public boolean getIsExpected() {return this.isExpected;}
-    public AllocationSnapshot setIsExpected(boolean isExpected) {this.isExpected = isExpected; return this;}
 }

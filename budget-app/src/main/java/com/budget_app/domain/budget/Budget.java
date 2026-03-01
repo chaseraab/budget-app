@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +22,32 @@ public class Budget {
     private String name;
     private YearMonth month;
 
-    @OneToMany
-    @JoinColumn(name="allocationid")
+    @OneToMany(
+            mappedBy = "budget",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<AllocationBudget> allocations = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name="transactionid")
+    @OneToMany(
+            mappedBy = "budget",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<Transaction> transactions = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name="accountbalanceid")
+    @OneToMany(
+            mappedBy = "budget",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<AccountBalance> startOfMonthBalances = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name="accountbalanceid")
+    @OneToMany(
+            mappedBy = "budget",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<AccountBalance> endOfMonthBalances = new ArrayList<>();
 
     public Long getId() {return id;}
@@ -44,9 +55,13 @@ public class Budget {
     public Budget setName(String name) {this.name = name; return this;}
     public YearMonth getMonth() {return month;}
     public Budget setMonth(YearMonth month) {this.month = month; return this;}
+    public List<AllocationBudget> getAllocations() {return allocations;}
+    public Budget setAllocations(List<AllocationBudget> allocations) {this.allocations = allocations; return this;}
+
 
     public void addAllocation(AllocationBudget allocation) {
         allocations.add(allocation);
+        allocation.setBudget(this);
     }
 
     public void removeAllocation(Long id) {

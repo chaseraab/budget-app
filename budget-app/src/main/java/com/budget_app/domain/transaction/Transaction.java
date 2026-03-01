@@ -2,6 +2,7 @@ package com.budget_app.domain.transaction;
 
 import com.budget_app.domain.account.Account;
 import com.budget_app.domain.allocation.budget.AllocationBudget;
+import com.budget_app.domain.budget.Budget;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,6 +20,10 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name="allocationid")
     private AllocationBudget allocation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "budgetid", nullable = false)
+    private Budget budget;
 
     private LocalDate date;
     private String item;
@@ -38,4 +43,6 @@ public class Transaction {
     public Transaction setAmount(double amount) {this.amount = amount; return this;}
     public AllocationBudget getAllocation() {return allocation;}
     public Transaction setAllocation(AllocationBudget allocation) {this.allocation = allocation; return this;}
+    public Budget getBudget() {return budget;}
+    public Transaction setBudget(Budget budget) {this.budget = budget; return this;}
 }

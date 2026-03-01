@@ -47,7 +47,6 @@ public class AccountService extends BaseService<Account, Long, AccountRequest, A
                     existing.setName(request.name());
                     existing.setType(request.type());
                     existing.setIsActive(request.isActive());
-
                     repository.save(existing);
                     return ResponseEntity.ok(toResponse(existing));
                 })

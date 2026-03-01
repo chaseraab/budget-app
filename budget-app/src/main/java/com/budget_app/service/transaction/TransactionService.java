@@ -10,7 +10,7 @@ import com.budget_app.dto.transaction.TransactionResponse;
 import com.budget_app.dto.transaction.TransactionUploadResponse;
 import com.budget_app.mapper.transaction.TransactionMapper;
 import com.budget_app.repository.account.AccountRepository;
-import com.budget_app.repository.allocation.AllocationRepository;
+import com.budget_app.repository.allocation.budget.AllocationBudgetRepository;
 import com.budget_app.repository.transaction.TransactionRepository;
 import com.budget_app.service.base.BaseService;
 import com.budget_app.service.storageService.StorageService;
@@ -26,19 +26,19 @@ import java.util.Objects;
 public class TransactionService extends BaseService<Transaction, Long, TransactionRequest, TransactionResponse> {
 
     private final AccountRepository accountRepository;
-    private final AllocationRepository allocationRepository;
+    private final AllocationBudgetRepository allocationBudgetRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionMapper mapper;
     private final StorageService storageService;
     private final CSVReader csvReader;
     private final CSVTransactionConverter csvTransactionConverter;
 
-    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, AllocationRepository allocationRepository,
+    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository, AllocationBudgetRepository allocationBudgetRepository,
                               TransactionMapper mapper, StorageService storageService, CSVReader csvReader, CSVTransactionConverter csvTransactionConverter) {
         super(transactionRepository);
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
-        this.allocationRepository = allocationRepository;
+        this.allocationBudgetRepository = allocationBudgetRepository;
         this.mapper = mapper;
         this.storageService = storageService;
         this.csvReader = csvReader;
@@ -56,7 +56,7 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
                 .map(existing -> {
                     Account account = accountRepository.findById(request.accountId())
                             .orElseThrow(() -> new RuntimeException("Account not found"));
-                    AllocationBudget allocation = allocationRepository.findById(request.allocationId())
+                    AllocationBudget allocation = allocationBudgetRepository.findById(request.allocationId())
                             .orElseThrow(() -> new RuntimeException("Allocation not found"));
                     existing.setAccount(account);
                     existing.setAllocation(allocation);
@@ -74,7 +74,7 @@ public class TransactionService extends BaseService<Transaction, Long, Transacti
         System.out.println("Received request: " + request.accountId() + " " + request.allocationId());
         Account account = accountRepository.findById(request.accountId())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
-        AllocationBudget allocation = allocationRepository.findById(request.allocationId())
+        AllocationBudget allocation = allocationBudgetRepository.findById(request.allocationId())
                 .orElseThrow(() -> new RuntimeException("Allocation not found"));
 
         Transaction transaction = new Transaction()
