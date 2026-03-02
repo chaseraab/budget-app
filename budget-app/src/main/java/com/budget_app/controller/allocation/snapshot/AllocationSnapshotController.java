@@ -1,4 +1,4 @@
-package com.budget_app.controller.allocation;
+package com.budget_app.controller.allocation.snapshot;
 
 import com.budget_app.controller.base.BaseController;
 import com.budget_app.dto.allocation.budget.AllocationBudgetRequest;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/allocations")
-public class AllocationController extends BaseController<Long, AllocationBudgetRequest, AllocationBudgetResponse> {
+public class AllocationSnapshotController extends BaseController<Long, AllocationBudgetRequest, AllocationBudgetResponse> {
 
-    public AllocationController(AllocationBudgetService service) {
+    public AllocationSnapshotController(AllocationBudgetService service) {
         super(service);
     }
 
