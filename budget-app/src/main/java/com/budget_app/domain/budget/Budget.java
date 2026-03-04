@@ -3,6 +3,8 @@ package com.budget_app.domain.budget;
 import com.budget_app.domain.accountBalance.AccountBalance;
 import com.budget_app.domain.allocation.budget.AllocationBudget;
 import com.budget_app.domain.allocation.snapshot.AllocationSnapshot;
+import com.budget_app.domain.income.budget.IncomeBudget;
+import com.budget_app.domain.income.snapshot.IncomeSnapshot;
 import com.budget_app.dto.allocation.budget.AllocationBudgetRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +44,13 @@ public class Budget {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    private List<IncomeBudget> income = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "budget",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<AccountBalance> startOfMonthBalances = new ArrayList<>();
 
     @OneToMany(
@@ -59,23 +68,47 @@ public class Budget {
     public List<AllocationBudget> getAllocations() {return allocations;}
     public Budget setAllocations(List<AllocationBudget> allocations) {this.allocations = allocations; return this;}
 
-    public void addAllocationFromSnapshot(AllocationSnapshot allocationSnapshot) {
-        AllocationBudget allocationBudget = new AllocationBudget()
-                .setName(allocationSnapshot.getName())
-                .setType(allocationSnapshot.getType())
-                .setAmount(allocationSnapshot.getAmount());
-        this.addAllocation(allocationBudget);
+//    public void addIncomeFromSnapshot(IncomeSnapshot incomeSnapshot) {
+//        IncomeBudget incomeBudget = new IncomeBudget()
+//                .set
+//    }
+
+//    public void addAllocationFromSnapshot(AllocationSnapshot allocationSnapshot) {
+//        AllocationBudget allocationBudget = new AllocationBudget()
+//                .setName(allocationSnapshot.getName())
+//                .setType(allocationSnapshot.getType())
+//                .setAmount(allocationSnapshot.getAmount());
+//        this.addAllocation(allocationBudget);
+//    }
+
+//    public void addAllocationFromRequest(AllocationBudget request) {
+//        AllocationBudget allocationBudget = new AllocationBudget()
+//                .setName(request.name())
+//                .setType(request.type())
+//                .setAmount(request.amount());
+//        this.addAllocation(allocationBudget);
+//    }
+
+    public void addIncome(IncomeBudget income) {
+        this.income.add(income);
+        income.setBudget(this);
     }
 
-    public void addAllocationFromRequest(AllocationBudgetRequest request) {
-        AllocationBudget allocationBudget = new AllocationBudget()
-                .setName(request.name())
-                .setType(request.type())
-                .setAmount(request.amount());
-        this.addAllocation(allocationBudget);
+    public void removeIncome(Long id) {
+        income.removeIf(a -> Objects.equals(a.getId(), id));
     }
 
-    private void addAllocation(AllocationBudget allocation) {
+    public void updateIncome(Long id, IncomeBudget income) {
+        IncomeBudget existing = this.income.stream()
+                .filter(a -> Objects.equals(a.getId(), id))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Unable to find allocation"));
+        existing.setAmount(income.getAmount())
+                .setName(income.getName())
+                .setAccount(income.getAccount());
+    }
+
+    public void addAllocation(AllocationBudget allocation) {
         allocations.add(allocation);
         allocation.setBudget(this);
     }
@@ -84,14 +117,14 @@ public class Budget {
         allocations.removeIf(a -> Objects.equals(a.getId(), id));
     }
 
-    public void updateAllocation(Long id, AllocationBudgetRequest request) {
+    public void updateAllocation(Long id, AllocationBudget request) {
         AllocationBudget allocation = allocations.stream()
                 .filter(a -> Objects.equals(a.getId(), id))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("Unable to find allocation"));
-        allocation.setName(request.name())
-                .setType(request.type())
-                .setAmount(request.amount());
+        allocation.setName(request.getName())
+                .setType(request.getType())
+                .setAmount(request.getAmount());
     }
 
     public AllocationBudget findAllocation(long id) {

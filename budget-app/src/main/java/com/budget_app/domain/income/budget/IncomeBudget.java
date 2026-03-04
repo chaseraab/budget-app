@@ -12,12 +12,13 @@ public class IncomeBudget {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="accountid")
     private Account account;
 
     private double amount;
     private String name;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "budgetid", nullable = false)
     private Budget budget;
