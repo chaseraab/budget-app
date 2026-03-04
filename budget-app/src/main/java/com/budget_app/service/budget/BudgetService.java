@@ -85,7 +85,7 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         return new IncomeBudget()
                 .setAccount(incomeSnapshot.getAccount())
                 .setName(incomeSnapshot.getName())
-                .setAmount(incomeSnapshot.getAmount())
+                .setAmount(incomeSnapshot.getAmount());
     }
 
     private IncomeBudget createIncomeFromRequest(IncomeBudgetRequest request) {
@@ -119,7 +119,6 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         List<AccountBalance> balances = accountBalanceRepository.findLatestPerActiveAccount();
         balances.forEach(budget::setInitialEndOfMonthAccountBalances);
 
-
         List<IncomeSnapshot> income = incomeSnapshotRepository.findByIsActiveTrue();
         income.forEach(i -> {
             budget.addIncome(createIncomeFromSnapshot(i));
@@ -127,7 +126,6 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
 
         repository.save(budget);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     public ResponseEntity<BudgetResponse> addAllocation(Long id, AllocationBudgetRequest request) {
@@ -146,11 +144,11 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         return ResponseEntity.ok("Deleted");
     }
 
-    public ResponseEntity<BudgetResponse> updateAllocation(Long budgetId, AllocationBudgetRequest request) {
+    public ResponseEntity<BudgetResponse> updateAllocation(Long budgetId, Long allocationId, AllocationBudgetRequest request) {
         AllocationBudget allocation = createAllocationFromRequest(request);
         return repository.findById(budgetId)
                 .map(existing -> {
-                    existing.updateAllocation(budgetId, allocation);
+                    existing.updateAllocation(allocationId, allocation);
                     repository.save(existing);
                     return ResponseEntity.ok(toResponse(existing));
                 }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -167,12 +165,12 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         return ResponseEntity.ok(toResponse(budget));
     }
 
-    public ResponseEntity<BudgetResponse> removeTransaction(Long budgetId, Long allocationId, Long transactionId) {
+    public ResponseEntity<String> deleteTransaction(Long budgetId, Long allocationId, Long transactionId) {
         Budget budget = findBudget(budgetId);
         AllocationBudget allocation = budget.findAllocation(allocationId);
         allocation.removeTransaction(transactionId);
         repository.save(budget);
-        return ResponseEntity.ok(toResponse(budget));
+        return ResponseEntity.ok("Deleted");
     }
 
     public ResponseEntity<BudgetResponse> updateTransaction(Long budgetId, Long allocationId, Long transactionId, TransactionRequest request) {
@@ -193,11 +191,11 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         return ResponseEntity.ok(toResponse(budget));
     }
 
-    public ResponseEntity<BudgetResponse> removeIncome(Long budgetId, Long incomeId) {
+    public ResponseEntity<String> deleteIncome(Long budgetId, Long incomeId) {
         Budget budget = findBudget(budgetId);
         budget.removeIncome(incomeId);
         repository.save(budget);
-        return ResponseEntity.ok(toResponse(budget));
+        return ResponseEntity.ok("Deleted");
     }
 
     public ResponseEntity<BudgetResponse> updateIncome(Long budgetId, Long incomeId, IncomeBudgetRequest request) {
