@@ -4,7 +4,7 @@ import com.budget_app.domain.account.Account;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "income")
+@Table(name = "income_snapshots")
 public class IncomeSnapshot {
 
     @Id

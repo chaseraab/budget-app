@@ -12,6 +12,6 @@ public interface IncomeSnapshotMapper {
     @Mapping(target = "account", ignore = true)
     IncomeSnapshot toEntity(IncomeSnapshotRequest request);
 
-    @Mapping(target = "budgetId", source = "budget.id")
+    @Mapping(source = "account.id", target = "accountId")
     IncomeSnapshotResponse toResponse(IncomeSnapshot entity);
 }

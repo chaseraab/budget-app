@@ -25,7 +25,7 @@ public class AllocationBudget {
     private Budget budget;
 
     @OneToMany(
-            mappedBy = "budget",
+            mappedBy = "allocation",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -40,6 +40,13 @@ public class AllocationBudget {
     public AllocationBudget setAmount(Double amount) {this.amount = amount; return this;}
     public Budget getBudget() {return budget;}
     public AllocationBudget setBudget(Budget budget) {this.budget = budget; return this;}
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    public AllocationBudget setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+        return this;
+    }
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);

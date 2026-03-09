@@ -5,12 +5,12 @@ import com.budget_app.domain.budget.Budget;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "income")
+@Table(name = "income_budgets")
 public class IncomeBudget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="accountid")

@@ -116,8 +116,10 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
             budget.addAllocation(createAllocationFromSnapshot(i));
         });
 
+        System.out.println("Finding balances");
         List<AccountBalance> balances = accountBalanceRepository.findLatestPerActiveAccount();
-        balances.forEach(budget::setInitialEndOfMonthAccountBalances);
+        balances.forEach(System.out::println);
+        balances.forEach(budget::setInitialStartOfMonthAccountBalances);
 
         List<IncomeSnapshot> income = incomeSnapshotRepository.findByIsActiveTrue();
         income.forEach(i -> {
@@ -125,7 +127,7 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
         });
 
         repository.save(budget);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(toResponse(budget));
     }
 
     public ResponseEntity<BudgetResponse> addAllocation(Long id, AllocationBudgetRequest request) {
@@ -156,9 +158,11 @@ public class BudgetService extends BaseService<Budget, Long, BudgetRequest, Budg
 
     public ResponseEntity<BudgetResponse> addTransaction(Long budgetId, Long allocationId, TransactionRequest request) {
         Budget budget = findBudget(budgetId);
+        Account account = findAccount(request.accountId());
         AllocationBudget allocation = budget.findAllocation(allocationId);
         Transaction transaction = createTransactionFromRequest(request)
-            .setAllocation(allocation);
+                .setAccount(account)
+                .setAllocation(allocation);
 
         allocation.addTransaction(transaction);
         repository.save(budget);

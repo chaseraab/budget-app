@@ -17,8 +17,8 @@ public class Transaction {
     @JoinColumn(name="accountid")
     private Account account;
 
-    @ManyToOne
-    @JoinColumn(name="allocationid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "allocationid", nullable = false)
     private AllocationBudget allocation;
 
     private LocalDate date;

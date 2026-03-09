@@ -1,11 +1,9 @@
 package com.budget_app.domain.budget;
 
 import com.budget_app.domain.accountBalance.AccountBalance;
+import com.budget_app.domain.accountBalance.BalanceType;
 import com.budget_app.domain.allocation.budget.AllocationBudget;
-import com.budget_app.domain.allocation.snapshot.AllocationSnapshot;
 import com.budget_app.domain.income.budget.IncomeBudget;
-import com.budget_app.domain.income.snapshot.IncomeSnapshot;
-import com.budget_app.dto.allocation.budget.AllocationBudgetRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
@@ -19,7 +17,7 @@ import java.util.Objects;
 @Table(name = "budgets")
 public class Budget {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -31,13 +29,6 @@ public class Budget {
             orphanRemoval = true
     )
     private List<AllocationBudget> allocations = new ArrayList<>();
-
-//    @OneToMany(
-//            mappedBy = "budget",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<Transaction> transactions = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "budget",
@@ -51,6 +42,7 @@ public class Budget {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @org.hibernate.annotations.SQLRestriction("type = 'START'")
     private List<AccountBalance> startOfMonthBalances = new ArrayList<>();
 
     @OneToMany(
@@ -58,6 +50,7 @@ public class Budget {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @org.hibernate.annotations.SQLRestriction("type = 'END'")
     private List<AccountBalance> endOfMonthBalances = new ArrayList<>();
 
     public Long getId() {return id;}
@@ -67,27 +60,6 @@ public class Budget {
     public Budget setMonth(YearMonth month) {this.month = month; return this;}
     public List<AllocationBudget> getAllocations() {return allocations;}
     public Budget setAllocations(List<AllocationBudget> allocations) {this.allocations = allocations; return this;}
-
-//    public void addIncomeFromSnapshot(IncomeSnapshot incomeSnapshot) {
-//        IncomeBudget incomeBudget = new IncomeBudget()
-//                .set
-//    }
-
-//    public void addAllocationFromSnapshot(AllocationSnapshot allocationSnapshot) {
-//        AllocationBudget allocationBudget = new AllocationBudget()
-//                .setName(allocationSnapshot.getName())
-//                .setType(allocationSnapshot.getType())
-//                .setAmount(allocationSnapshot.getAmount());
-//        this.addAllocation(allocationBudget);
-//    }
-
-//    public void addAllocationFromRequest(AllocationBudget request) {
-//        AllocationBudget allocationBudget = new AllocationBudget()
-//                .setName(request.name())
-//                .setType(request.type())
-//                .setAmount(request.amount());
-//        this.addAllocation(allocationBudget);
-//    }
 
     public void addIncome(IncomeBudget income) {
         this.income.add(income);
@@ -107,6 +79,9 @@ public class Budget {
                 .setName(income.getName())
                 .setAccount(income.getAccount());
     }
+
+    public List<IncomeBudget> getIncome() {return this.income;}
+    public Budget setIncome(List<IncomeBudget> income) {this.income = income; return this;}
 
     public void addAllocation(AllocationBudget allocation) {
         allocations.add(allocation);
@@ -143,13 +118,15 @@ public class Budget {
 
     public void setInitialEndOfMonthAccountBalances(AccountBalance accountBalance) {
         AccountBalance newBalance = createNewAccountBalance(accountBalance);
-        newBalance.setDate(this.month.atEndOfMonth());
+        newBalance.setDate(this.month.atEndOfMonth())
+                .setType(BalanceType.END);
         addEndOfMonthAccountBalance(newBalance);
     }
 
     public void setInitialStartOfMonthAccountBalances(AccountBalance accountBalance) {
         AccountBalance newBalance = createNewAccountBalance(accountBalance);
-        newBalance.setDate(this.month.atDay(1));
+        newBalance.setDate(this.month.atDay(1))
+                .setType(BalanceType.START);
         addStartOfMonthAccountBalance(newBalance);
     }
 
@@ -157,6 +134,9 @@ public class Budget {
         startOfMonthBalances.add(accountBalance);
         accountBalance.setBudget(this);
     }
+
+    public List<AccountBalance> getStartOfMonthBalances() {return startOfMonthBalances;}
+    public Budget setStartOfMonthBalances(List<AccountBalance> startOfMonthBalances) {this.startOfMonthBalances = startOfMonthBalances; return this;}
 
     public void removeStartOfMonthAccountBalance(AccountBalance accountBalance) {
         startOfMonthBalances = startOfMonthBalances.stream().filter(s -> !(Objects.equals(s.getId(), accountBalance.getId()))).toList();
@@ -172,5 +152,8 @@ public class Budget {
         endOfMonthBalances = endOfMonthBalances.stream().filter(s -> !(Objects.equals(s.getId(), accountBalance.getId()))).toList();
         accountBalance.setBudget(null);
     }
+
+    public List<AccountBalance> getEndOfMonthBalances() {return endOfMonthBalances;}
+    public Budget setEndOfMonthBalances(List<AccountBalance> endOfMonthBalances) {this.endOfMonthBalances = endOfMonthBalances; return this;}
 
 }

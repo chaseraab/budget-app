@@ -1,12 +1,12 @@
 package com.budget_app.dto.budget;
 
-import com.budget_app.domain.accountBalance.AccountBalance;
-import com.budget_app.domain.allocation.budget.AllocationBudget;
-import com.budget_app.domain.transaction.Transaction;
+import com.budget_app.dto.accountBalance.AccountBalanceResponse;
+import com.budget_app.dto.allocation.budget.AllocationBudgetResponse;
+import com.budget_app.dto.income.budget.IncomeBudgetResponse;
 
 import java.time.YearMonth;
 import java.util.List;
 
-public record BudgetResponse(Long id, String name, YearMonth month, List<AllocationBudget> allocations,
-                             List<Transaction> transactions, List<AccountBalance> startOfMonthBalance, List<AccountBalance> endOfMonthBalance) {
+public record BudgetResponse(Long id, String name, YearMonth month, List<IncomeBudgetResponse> income, List<AllocationBudgetResponse> allocations,
+                             List<AccountBalanceResponse> startOfMonthBalances, List<AccountBalanceResponse> endOfMonthBalances) {
 }

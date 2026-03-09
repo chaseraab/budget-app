@@ -8,6 +8,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface AllocationBudgetMapper {
 
+    @Mapping(target = "budget", ignore = true)
+    @Mapping(target = "transactions", ignore = true)
     AllocationBudget toEntity(AllocationBudgetRequest request);
+
+    @Mapping(source = "budget.id", target = "budgetId")
     AllocationBudgetResponse toResponse(AllocationBudget allocation);
 }

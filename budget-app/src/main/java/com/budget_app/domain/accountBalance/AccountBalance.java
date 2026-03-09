@@ -14,13 +14,18 @@ public class AccountBalance {
 
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accountid", nullable = false)
     private Account account;
     private float balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "budgetid", nullable = false)
     private Budget budget;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private BalanceType type;
 
     public Long getId() {return id;}
     public LocalDate getDate() {return date;}
@@ -31,4 +36,6 @@ public class AccountBalance {
     public float getBalance() {return balance;}
     public Budget getBudget() {return budget;}
     public AccountBalance setBudget(Budget budget) {this.budget = budget; return this;}
+    public BalanceType getType() {return type;}
+    public AccountBalance setType(BalanceType balanceType) {this.type = balanceType; return this;}
 }

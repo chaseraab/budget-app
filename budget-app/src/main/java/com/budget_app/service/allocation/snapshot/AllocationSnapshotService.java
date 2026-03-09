@@ -39,6 +39,7 @@ public class AllocationSnapshotService extends BaseService<AllocationSnapshot, L
 //                    Budget budget = budgetRepository.findById(request.budgetId())
 //                                    .orElseThrow(() -> new RuntimeException("Budget not found"));
 //                    existing.setBudget(budget);
+                    existing.setIsActive(request.isActive());
                     repository.save(existing);
                     return ResponseEntity.ok(toResponse(existing));
                 })
