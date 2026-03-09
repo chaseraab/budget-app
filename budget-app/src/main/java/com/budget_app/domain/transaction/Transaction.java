@@ -13,8 +13,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="accountid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accountid", nullable = false)
     private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
