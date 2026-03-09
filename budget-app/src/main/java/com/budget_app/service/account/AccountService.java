@@ -1,8 +1,10 @@
 package com.budget_app.service.account;
 
+import com.budget_app.domain.accountBalance.AccountBalance;
 import com.budget_app.dto.account.AccountRequest;
 import com.budget_app.dto.account.AccountResponse;
 import com.budget_app.mapper.account.AccountMapper;
+import com.budget_app.repository.accountBalance.AccountBalanceRepository;
 import com.budget_app.service.base.BaseService;
 import com.budget_app.domain.account.Account;
 import com.budget_app.repository.account.AccountRepository;
@@ -10,17 +12,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
 public class AccountService extends BaseService<Account, Long, AccountRequest, AccountResponse> {
 
     private final AccountRepository accountRepository;
+    private final AccountBalanceRepository accountBalanceRepository;
     private final AccountMapper mapper;
 
-    public AccountService(AccountRepository repository, AccountMapper mapper) {
+    public AccountService(AccountRepository repository, AccountBalanceRepository accountBalanceRepository, AccountMapper mapper) {
         super (repository);
         this.accountRepository = repository;
+        this.accountBalanceRepository = accountBalanceRepository;
         this.mapper = mapper;
     }
 
@@ -47,10 +52,21 @@ public class AccountService extends BaseService<Account, Long, AccountRequest, A
                     existing.setName(request.name());
                     existing.setType(request.type());
                     existing.setIsActive(request.isActive());
-
                     repository.save(existing);
                     return ResponseEntity.ok(toResponse(existing));
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public ResponseEntity<AccountResponse> create(AccountRequest request) {
+        Account account = toEntity(request);
+        AccountBalance accountBalance = new AccountBalance()
+                .setBalance(0)
+                .setAccount(account)
+                .setBudget(null)
+                .setDate(LocalDate.now());
+        repository.save(account);
+        return ResponseEntity.ok(toResponse(account));
     }
 }

@@ -8,9 +8,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface AccountBalanceMapper {
 
+    @Mapping(target = "budget", ignore = true)
     @Mapping(target = "account", ignore = true)
     AccountBalance toEntity(AccountBalanceRequest request);
 
-    @Mapping(target = "accountId", source = "account.id")
+    @Mapping(source = "budget.id", target = "budgetId")
+    @Mapping(source = "account.id", target = "accountId")
     AccountBalanceResponse toResponse(AccountBalance entity);
 }

@@ -1,7 +1,8 @@
 package com.budget_app.domain.transaction;
 
 import com.budget_app.domain.account.Account;
-import com.budget_app.domain.allocation.Allocation;
+import com.budget_app.domain.allocation.budget.AllocationBudget;
+import com.budget_app.domain.budget.Budget;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -12,13 +13,13 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="accountid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accountid", nullable = false)
     private Account account;
 
-    @ManyToOne
-    @JoinColumn(name="allocationid")
-    private Allocation allocation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "allocationid", nullable = false)
+    private AllocationBudget allocation;
 
     private LocalDate date;
     private String item;
@@ -36,6 +37,6 @@ public class Transaction {
     public Transaction setAccount(Account account) {this.account = account; return this;}
     public double getAmount() {return amount;}
     public Transaction setAmount(double amount) {this.amount = amount; return this;}
-    public Allocation getAllocation() {return allocation;}
-    public Transaction setAllocation(Allocation allocation) {this.allocation = allocation; return this;}
+    public AllocationBudget getAllocation() {return allocation;}
+    public Transaction setAllocation(AllocationBudget allocation) {this.allocation = allocation; return this;}
 }
