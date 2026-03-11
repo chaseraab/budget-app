@@ -2,11 +2,12 @@ package com.budget_app.mapper.budget;
 
 import com.budget_app.domain.budget.Budget;
 import com.budget_app.dto.budget.*;
+import com.budget_app.mapper.accountBalance.AccountBalanceMapper;
 import com.budget_app.mapper.allocation.budget.AllocationBudgetMapper;
 import com.budget_app.mapper.income.budget.IncomeBudgetMapper;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = { AllocationBudgetMapper.class, IncomeBudgetMapper.class })
+@Mapper(componentModel = "spring", uses = { AllocationBudgetMapper.class, IncomeBudgetMapper.class, AccountBalanceMapper.class })
 public interface BudgetMapper {
 
     @BeanMapping(ignoreByDefault = true)

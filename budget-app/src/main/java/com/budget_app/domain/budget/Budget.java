@@ -21,6 +21,8 @@ public class Budget {
     private Long id;
 
     private String name;
+
+    @Column(columnDefinition = "date")
     private YearMonth month;
 
     @OneToMany(
